@@ -40,8 +40,10 @@ public class SqsService {
         List<Message> messages = sqsClient.receiveMessage(receiveMessageRequest).messages();
 
         return messages.stream()
-                .map(message -> new MessageDto(message.messageId(), message.body()), messages.receiptHandle())
+                .map(message -> new MessageDto(message.messageId(), message.body(), message.receiptHandle()))
                 .collect(Collectors.toList());
+
+
     }
 
     public void deleteMessage(String receiptHandle) {

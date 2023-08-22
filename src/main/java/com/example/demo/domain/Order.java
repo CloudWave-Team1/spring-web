@@ -33,9 +33,6 @@ public class Order {
     @Column(name = "order_date")
     private LocalDateTime orderDate;
 
-    @Column(name = "processed", nullable = false)
-    private boolean processed = false; // 처리 완료 여부. 기본값을 false로 설정
-
     public Order(String customerId, String foodItem, int quantity, double totalPrice) {
         this.customerId = customerId;
         this.foodItem = foodItem;
@@ -52,8 +49,4 @@ public class Order {
         this.orderDate = orderDate;
     }
 
-    // '처리 완료' 상태로 변경하는 메서드
-    public void markAsProcessed() {
-        this.processed = true;
-    }
 }

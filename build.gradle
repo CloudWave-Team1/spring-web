@@ -23,6 +23,9 @@ dependencies {
 	implementation 'mysql:mysql-connector-java:8.0.26'
 	// https://mvnrepository.com/artifact/software.amazon.awssdk/sqs
 	implementation group: 'software.amazon.awssdk', name: 'sqs', version: '2.20.54'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:2.7.14'
+
+
 
 
 	annotationProcessor 'org.projectlombok:lombok'

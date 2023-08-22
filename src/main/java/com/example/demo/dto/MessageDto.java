@@ -10,11 +10,6 @@ public class MessageDto {
     private String body;
     private String receiptHandle;
 
-    public MessageDto(String messageId, String body) {
-        this.messageId = messageId;
-        this.body = body;
-    }
-
     public MessageDto(String messageId, String body, String receiptHandle) {
         this.messageId = messageId;
         this.body = body;

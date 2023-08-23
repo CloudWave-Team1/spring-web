@@ -52,9 +52,17 @@ public class MessageController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Endpoint ARN not found for the user."));
         }
 
-        String messageText = "Your custom message text here";
+        String messageText = "상품 준비가 완료되었습니다. 픽업대를 찾아주세요!";
+
+        // FCM 페이로드 형식으로 메시지 설정
+        String formattedMessage = "{"
+                + "\"default\": \"" + messageText + "\","
+                + "\"GCM\": \"{ \\\"notification\\\": { \\\"body\\\": \\\"" + messageText + "\\\" } }\""
+                + "}";
+
         PublishRequest publishRequest = new PublishRequest()
-                .withMessage(messageText)
+                .withMessageStructure("json") // 페이로드 형식
+                .withMessage(formattedMessage)
                 .withTargetArn(endpointArn);
 
         PublishResult publishResult;
@@ -74,35 +82,6 @@ public class MessageController {
 
         return ResponseEntity.ok().body(response);
     }
-
-
-//    @PostMapping("/complete")
-//    public ResponseEntity<Map<String, String>> deleteMessage(@RequestBody ReceiptHandleDto receiptHandleDto) {
-//        sqsReceiverService.deleteMessage(receiptHandleDto.getReceiptHandle());
-//
-//        String messageId = publishSNSPickup();
-//
-//        Map<String, String> response = new HashMap<>();
-//        response.put("message", "Message deleted and published to SNS topic successfully");
-//        response.put("snsMessageId", messageId);
-//
-//        return new ResponseEntity<>(response, HttpStatus.OK);
-//    }
-//
-//    private String publishSNSPickup() {
-//        // SNS로 메시지 전송
-//        String messageText = "Message deleted successfully from SQS";
-//
-//        PublishRequest publishRequest = new PublishRequest()
-//                .withMessage(messageText)
-//                .withTopicArn(topicArn);
-//
-//        // 메시지 발행 후 PublishResult 객체 받기
-//        PublishResult publishResult = snsClient.publish(publishRequest);
-//
-//        // 메시지 ID 반환
-//        return publishResult.getMessageId();
-//    }
 
 
 }

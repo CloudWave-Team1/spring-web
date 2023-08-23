@@ -15,6 +15,5 @@ public class OrderMessageDto {
     private int quantity;
     private LocalDateTime orderDate;
     private String receiptHandle;
-
-
+    private String phoneNumber;
 }

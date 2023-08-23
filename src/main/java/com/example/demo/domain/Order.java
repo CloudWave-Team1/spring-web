@@ -3,6 +3,8 @@ package com.example.demo.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,6 +14,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Order {
 
     @Id
@@ -30,6 +33,7 @@ public class Order {
     @Column(name = "total_price", nullable = false)
     private double totalPrice;
 
+    @CreatedDate
     @Column(name = "order_date")
     private LocalDateTime orderDate;
 
@@ -38,15 +42,6 @@ public class Order {
         this.foodItem = foodItem;
         this.quantity = quantity;
         this.totalPrice = totalPrice;
-        this.orderDate = LocalDateTime.now();
-    }
-
-    public Order(String customerId, String foodItem, int quantity, double totalPrice, LocalDateTime orderDate) {
-        this.customerId = customerId;
-        this.foodItem = foodItem;
-        this.quantity = quantity;
-        this.totalPrice = totalPrice;
-        this.orderDate = orderDate;
     }
 
 }

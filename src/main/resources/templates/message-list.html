@@ -80,6 +80,7 @@
             <th>Quantity</th>
             <th>Order Date</th>
             <th class="hidden-receiptHandle" >receiptHandle</th>
+<!--            <th class="hidden-receiptHandle" >phoneNumber</th>-->
         </tr>
         </thead>
         <tbody>
@@ -90,6 +91,7 @@
             <td th:text="${order.quantity}"></td>
             <td th:text="${order.orderDate}"></td>
             <td class="hidden-receiptHandle" th:text="${order.receiptHandle}"></td>
+<!--            <td class="hidden-receiptHandle" th:text="${order.phoneNumber}"></td>-->
         </tr>
         </tbody>
     </table>

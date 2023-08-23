@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 
 @Service
 public class OrderService {
@@ -20,7 +19,7 @@ public class OrderService {
 
     @Transactional
     public Order createOrder(String customerName, String foodItem, int quantity, double totalPrice) {
-        Order order = new Order(customerName, foodItem, quantity, totalPrice, LocalDateTime.now());
+        Order order = new Order(customerName, foodItem, quantity, totalPrice);
         return orderRepository.save(order);
     }
 }

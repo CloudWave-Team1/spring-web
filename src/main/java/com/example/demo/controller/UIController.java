@@ -45,7 +45,7 @@ public class UIController {
                     orderMessageDto.setFoodItem(order.getFoodItem());
                     orderMessageDto.setQuantity(order.getQuantity());
                     orderMessageDto.setOrderDate(order.getOrderDate());
-                    orderMessageDto.setPhoneNumber(order.getCustomerId());
+                    orderMessageDto.setCustomerId(order.getCustomerId());
                     orderMessageDto.setReceiptHandle(messageDto.getReceiptHandle());
 
                     orderMessageDtos.add(orderMessageDto);

@@ -25,29 +25,30 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             document.getElementById('checkBoxForm').addEventListener('submit', function (e) {
-                e.preventDefault();  // 폼의 기본 제출 동작을 중지합니다.
+                e.preventDefault();
                 const checkboxes = document.querySelectorAll('.orderCheckbox');
-                let selectedValues = [];
+                let selectedOrders = [];
 
                 checkboxes.forEach(checkbox => {
                     if (checkbox.checked) {
-                        selectedValues.push(checkbox.value);
+                        const [receiptHandle, customerId] = checkbox.value.split('|');
+                        selectedOrders.push({ receiptHandle, customerId });
                     }
                 });
 
                 // 선택된 체크박스가 없으면 알림을 보여줍니다.
-                if (selectedValues.length === 0) {
+                if (selectedOrders.length === 0) {
                     alert('Please select at least one checkbox.');
                     return;
                 }
 
                 // 선택된 각 체크박스에 대해 AJAX 요청을 전송합니다.
-                selectedValues.forEach(receiptHandle => {
+                selectedOrders.forEach(order => {
                     const data = {
-                        receiptHandle: receiptHandle
+                        receiptHandle: order.receiptHandle
                     };
 
-                    fetch('/api/messages/complete', {
+                    fetch(`/api/messages/completeAndNotify?customerId=${order.customerId}`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -55,20 +56,19 @@
                         body: JSON.stringify(data)
                     }).then(response => {
                         if (response.status === 200) {
-                            return response.json();  // 서버로부터 전송받은 JSON 응답을 반환합니다.
+                            return response.json();
                         } else {
-                            throw new Error('Failed to delete message');
+                            throw new Error('Failed to process transaction');
                         }
                     }).then(responseData => {
                         alert("[" + responseData.snsMessageId + "] " + responseData.message);
-                        location.replace(location.href);  // 페이지를 새로고침하여 변경된 상태를 반영합니다.
+                        location.replace(location.href);
                     }).catch(error => {
                         alert(error.message);
                     });
                 });
             });
         });
-
     </script>
 
 </head>
@@ -86,19 +86,18 @@
             <th>Quantity</th>
             <th>Order Date</th>
             <th class="hidden-receiptHandle">receiptHandle</th>
-            <!--            <th class="hidden-receiptHandle" >phoneNumber</th>-->
+            <th class="hidden-receiptHandle">customerId</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="order : ${orders}">
-            <td><input type="checkbox" class="orderCheckbox" th:value="${order.receiptHandle}" name="receiptHandles"/>
-            </td>
+            <td><input type="checkbox" class="orderCheckbox" th:value="${order.receiptHandle} + '|' + ${order.customerId}" name="receiptHandles"/></td>
             <td th:text="${order.orderId}"></td>
             <td th:text="${order.foodItem}"></td>
             <td th:text="${order.quantity}"></td>
             <td th:text="${order.orderDate}"></td>
             <td class="hidden-receiptHandle" th:text="${order.receiptHandle}"></td>
-            <!--            <td class="hidden-receiptHandle" th:text="${order.phoneNumber}"></td>-->
+            <td class="hidden-receiptHandle" th:text="${order.customerId}"></td>
         </tr>
         </tbody>
     </table>

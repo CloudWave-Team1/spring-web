@@ -8,8 +8,8 @@ import com.example.demo.dto.MessageDto;
 import com.example.demo.dto.ReceiptHandleDto;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.SqsService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,13 +20,11 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/messages")
+@Tag(name = "MessageController", description = "SQS 큐 대기열에 있는 메시지 조회")
 public class MessageController {
 
     private final SqsService sqsReceiverService;
     private final AmazonSNS snsClient;
-
-    @Value("${aws.sns.topicArn}")
-    private String topicArn;
 
     @Autowired
     private UserRepository userRepository;
@@ -44,6 +42,7 @@ public class MessageController {
     }
 
     @PostMapping("/completeAndNotify")
+    @Tag(name = "MessageController", description = "모바일 푸시 알림 전송 후 SQS 큐 대기열에서 삭제")
     public ResponseEntity<Map<String, String>> completeAndNotify(@RequestParam String customerId, @RequestBody ReceiptHandleDto receiptHandleDto) {
         // 1. 사용자에게 알림
         String endpointArn = userRepository.findEndpointArnByCustomerId(customerId);

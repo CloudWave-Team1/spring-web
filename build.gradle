@@ -30,6 +30,9 @@ dependencies {
 	/* swagger */
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.2'
 
+	/* aurora rds 추가 */
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
+
 
 	annotationProcessor 'org.projectlombok:lombok'
 

@@ -18,11 +18,12 @@ public class SqsService {
     @Autowired
     private SqsClient sqsClient;
 
-    private static final String QUEUE_URL = "https://sqs.eu-central-1.amazonaws.com/967724518132/enqueue.fifo";
+//    @Value("${sqs.queue.url}")
+    private String queueUrl = "https://sqs.ap-northeast-2.amazonaws.com/967724518132/enqueue.fifo";
 
     public void sendOrderMessage(String orderNumber) {
         SendMessageRequest sendMsgRequest = SendMessageRequest.builder()
-                .queueUrl(QUEUE_URL)
+                .queueUrl(queueUrl)
                 .messageBody(orderNumber)
                 .messageGroupId("OrderGroup")
                 .build();
@@ -32,7 +33,7 @@ public class SqsService {
 
     public List<MessageDto> receiveMessages() {
         ReceiveMessageRequest receiveMessageRequest = ReceiveMessageRequest.builder()
-                .queueUrl(QUEUE_URL)
+                .queueUrl(queueUrl)
                 .maxNumberOfMessages(10)
                 .waitTimeSeconds(20)
                 .build();
@@ -48,7 +49,7 @@ public class SqsService {
 
     public void deleteMessage(String receiptHandle) {
         DeleteMessageRequest deleteMessageRequest = DeleteMessageRequest.builder()
-                .queueUrl(QUEUE_URL)
+                .queueUrl(queueUrl)
                 .receiptHandle(receiptHandle)
                 .build();
 

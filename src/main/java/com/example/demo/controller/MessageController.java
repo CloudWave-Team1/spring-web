@@ -51,12 +51,13 @@ public class MessageController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Endpoint ARN not found for the user."));
         }
 
+        String messageTitle = "패스트오더";  // 알림 제목 추가
         String messageText = "상품 준비가 완료되었습니다. 픽업대를 찾아주세요!";
 
         // FCM 페이로드 형식으로 메시지 설정
         String formattedMessage = "{"
                 + "\"default\": \"" + messageText + "\","
-                + "\"GCM\": \"{ \\\"notification\\\": { \\\"body\\\": \\\"" + messageText + "\\\" } }\""
+                + "\"GCM\": \"{ \\\"notification\\\": { \\\"title\\\": \\\"" + messageTitle + "\\\", \\\"body\\\": \\\"" + messageText + "\\\" } }\""
                 + "}";
 
         PublishRequest publishRequest = new PublishRequest()
@@ -67,16 +68,16 @@ public class MessageController {
         PublishResult publishResult;
         try {
             publishResult = snsClient.publish(publishRequest);
-        } catch(Exception e) {
+        } catch (Exception e) {
             // SNS 전송 중 오류 발생 시
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "Failed to send notification."));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", "메시지 삭제에 실패하였습니다. \n페이지를 새로고침해주세요."));
         }
 
         // 2. 메시지 삭제
         sqsReceiverService.deleteMessage(receiptHandleDto.getReceiptHandle());
 
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Notification sent successfully and message deleted");
+        response.put("message", "메시지가 성공적으로 처리되었습니다.");
         response.put("snsMessageId", publishResult.getMessageId());
 
         return ResponseEntity.ok().body(response);
